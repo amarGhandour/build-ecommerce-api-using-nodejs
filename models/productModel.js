@@ -93,15 +93,17 @@ productSchema.pre(/^find/, function (next) {
 });
 
 const setImageURL = (doc) => {
-  if (doc.imageCover) {
+  if (doc.imageCover && !doc.imageCover.startsWith('http')) {
     const imageUrl = `${process.env.BASE_URL}/products/${doc.imageCover}`;
     doc.imageCover = imageUrl;
   }
   if (doc.images) {
     const imagesList = [];
     doc.images.forEach((image) => {
-      const imageUrl = `${process.env.BASE_URL}/products/${image}`;
-      imagesList.push(imageUrl);
+      if (doc.image && !doc.image.startsWith('http')){
+        const imageUrl = `${process.env.BASE_URL}/products/${image}`;
+        imagesList.push(imageUrl);
+      }
     });
     doc.images = imagesList;
   }
